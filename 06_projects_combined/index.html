@@ -6,13 +6,17 @@
 <!--메뉴버튼 누르거나 스크롤 끝까지 닿으면 contact us 팝업 ㅇ-->
 <!--contact us form validator ㅇ-->
 <!--favorite 기능 ㅇ-->
-<!--favorite 기능 구현할 때 favorite구현 필요한 데이터만 전역변수에 저장하기-->
-<!--favorite sidebar 스무스하게 열고 닫기, 아이콘 바꾸기, animation transition 복습-->
-<!--favorite sidebar product 설명 너무길면 ...으로 끝나게 하고 숨기기-->
+<!--favorite 기능 구현할 때 favorite구현 필요한 데이터만 전역변수에 저장하기ㅇ-->
+<!--favorite sidebar 스무스하게 열고 닫기, 아이콘 바꾸기, animation transition 복습 ㅇ-->
+<!--favorite sidebar product 설명 너무길면 ...으로 끝나게 하고 숨기기ㅇ-->
 <!--like누르면 하트 solid로 바꾸기 ㅇ-->
-<!--like 눌렀던 item 하트 solid로 로딩되게 하기 -->
-<!--favorite sidebar 열면 contact 왼쪽으로 옮기기, 폰에서는 그냥 가리기-->
-<!--반응형-->
+<!--trash 버튼 누르면 bar 사라지는 것 개선 ㅇ-->
+<!--하트 누르면 bar 업데이트 ㅇ-->
+<!--like 눌렀던 item 하트 solid로 로딩되게 하기 ㅇ -->
+<!--솔리드 하트 누르면 취소 ㅇ-->
+<!--trash 버튼 누르면 하트도 취소 ㅇ-->
+<!--더미 제목 ㅇ-->
+<!--반응형 ex.favorite sidebar 열면 contact 왼쪽으로 옮기기, 폰에서는 그냥 가리기-->
 <!--로딩-->
 <!--home / what do we do? / who we are / what do we make? / our products / contact us ㅇ-->
 <!DOCTYPE html>
@@ -58,7 +62,7 @@
     </nav>
 
     <!--favorites sidebar-->
-    <div class="favorites-container" id="favorites-container" hidden>
+    <div class="favorites-container" id="favorites-container">
 
         <ul class="favorites-bar" id="favorites-bar">
             <li>
@@ -104,9 +108,9 @@
                         <div class="product-name">product name</div>
                         <div class="product-description">product description</div>
                         <div class="product-color">
-                            <div class="color1"></div>
-                            <div class="color2"></div>
-                            <div class="color3"></div>
+                            <div id="color1" class="color"></div>
+                            <div id="color2" class="color"></div>
+                            <div id="color3" class="color"></div>
                         </div>
                         <div class="product-stock">stock : 24</div>
                     </div>
@@ -194,9 +198,8 @@
     <section class="products" id="products">
         <h3>Our Products</h3>
         <ul>
-
+            <!--
             <li>
-                <!--solid heart: <i class="fas fa-heart"></i>-->
                 <button><i class="far fa-heart"></i></button>
                 <a href="#" target="_blank" style="background: red; height: 200px;">
                     df<img src="" alt="df" />
@@ -218,8 +221,10 @@
                     <img src="" alt="" />
                 </a>
             </li>
+        -->
 
         </ul>
+        <p>... And so much more!</p>
     </section>
     <!--contact-->
     <section class="contact close" id="contact">

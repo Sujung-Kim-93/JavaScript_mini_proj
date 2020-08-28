@@ -60,14 +60,35 @@ function lightDarkMode(mode) {
 // product infinite scroll
 
 // 제품사진 html element로 업로드
+
 function displayPhotos(data) {
+    // localStrage 가져오기
+    let stored = {};
+    if (localStorage.getItem('favorites') != null && localStorage.getItem('favorites') != '{}') {
+        stored = JSON.parse(localStorage.getItem('favorites'));
+        //console.log(stored);
+    }
 
     data.forEach((item) => {
         loadedPhotos += 1;
 
         // 추가된 적 없는 정보라면 사진정보 wholeData 전역변수에 추가
         if (wholeData[item['id']] == undefined) {
-            wholeData[item['id']] = item;
+            //wholeData[item['id']] = item;
+            wholeData[item['id']] = {
+                'id': item['id'],
+                'alt_description': item.alt_description,
+                'color': item['color'],
+                'description': item['description'],
+                'likes': item['likes'],
+                'links': {
+                    'html': item.links.html
+                },
+                'urls': {
+                    'regular': item.urls.regular,
+                    'thumb': item.urls.thumb
+                }
+            }
         }
 
         // html element 생성
@@ -82,8 +103,13 @@ function displayPhotos(data) {
         // like버튼 추가
         const likeButton = document.createElement('button');
         likeButton.setAttribute('onclick', `liked(this,'${item['id']}')`);
-
         likeButton.innerHTML = '<i class="far fa-heart"></i>';
+        // favorite에 추가된 적 있는 정보라면
+        if (stored[item['id']] != undefined) {
+            // heart solidheart로 바꾸기
+            likeButton.children[0].classList.replace('far', 'fas');
+            likeButton.children[0].style.color = 'rgb(202, 30, 0)';
+        }
 
         // append
         link.appendChild(img);
@@ -109,17 +135,13 @@ async function getPhotos() {
             console.log('Stopped retrying');
         } else {
             //재귀
-            //getPhotos();
+            getPhotos();
         }
     }
-
 }
 
 // like버튼 설정
 function liked(elem, id) {
-
-    // data 찾기
-    const foundData = wholeData[id];
     // localStorage favorites 가져오기
     let favorites = {};
 
@@ -127,23 +149,39 @@ function liked(elem, id) {
         favorites = JSON.parse(localStorage.getItem('favorites'));
     }
 
-    // favorites에 data 추가
-    favorites[id] = foundData;
-    // localStorage에 저장
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    // localStorage콘솔에표시
-    console.log(localStorage);
-    // 성공하면 heart solidheart로 바꾸기
-    elem.children[0].classList.replace('far', 'fas');
-    elem.children[0].style.color = 'rgb(202, 30, 0)';
+    // empty heart인 경우
+    if (elem.children[0].classList.contains('far')) {
+        // data 찾기
+        const foundData = wholeData[id];
+        // favorites에 data 추가
+        favorites[id] = foundData;
+        // localStorage에 저장
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        // localStorage콘솔에표시
+        //console.log(localStorage);
+
+        // 성공하면 heart solidheart로 바꾸기
+        elem.children[0].classList.replace('far', 'fas');
+        elem.children[0].style.color = 'rgb(202, 30, 0)';
+    } else {
+        // solid heart인 경우
+        delete favorites[id];
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        // 성공하면 emptyheart로 바꾸기
+        elem.children[0].classList.replace('fas', 'far');
+        elem.children[0].style.color = 'var(--txt-color)';
+    }
+
+    // favoritesbar 열려있으면 새로고침
+    if (favoritesContainer.classList.contains('slide-in')) {
+        showFavorite();
+        favoritesBar.scrollTop = favoritesBar.scrollHeight - favoritesBar.clientHeight;
+    }
+
 }
 
 // favorite 바에 아이템 리스트 보여주는 기능
 function showFavorite() {
-
-    // open favoritescontainer
-    favoritesContainer.hidden = false;
-
     // 다 비우기
     favoritesBar.textContent = '';
 
@@ -151,11 +189,10 @@ function showFavorite() {
     if (localStorage.getItem('favorites') != null && localStorage.getItem('favorites') != '{}') {
 
         // localStrage 가져오기
-        // console.log(localStorage.getItem('favorites'));
         const stored = JSON.parse(localStorage.getItem('favorites'));
+        //console.log(stored);
 
         Object.values(stored).forEach((item) => {
-            //console.log(item)
             // element생성
             const lst = document.createElement('li');
             const delButton = document.createElement('button');
@@ -164,9 +201,10 @@ function showFavorite() {
             delButton.setAttribute('onclick', `cancelFavorite('${item["id"]}')`);
             const link = document.createElement('a');
             link.href = item.links.html;
+            link.target = '_blank';
             const img = document.createElement('img');
             img.src = item.urls.thumb;
-            img.alt = item.alt_description;
+            img.alt = item['alt_description'];
             const info = document.createElement('div');
             info.classList.add('information');
             const productId = document.createElement('div');
@@ -174,18 +212,25 @@ function showFavorite() {
             productId.textContent = item["id"];
             const productName = document.createElement('div');
             productName.classList.add('product-name');
-            productName.textContent = item.description;
+            if (item.description != null) {
+                // item description이 따로 없는 경우
+                productName.textContent = item.description;
+            } else {
+                productName.textContent = 'Product ' + item["id"];
+            }
+
             const productDescription = document.createElement('div');
             productDescription.classList.add('product-description');
             productDescription.textContent = item.alt_description;
             const productColor = document.createElement('div');
             productColor.classList.add('product-color');
             const color1 = document.createElement('div');
-            color1.classList.add('color1');
+            color1.classList.add('color');
+            color1.style.background = item.color;
             const color2 = document.createElement('div');
-            color2.classList.add('color2');
+            color2.classList.add('color');
             const color3 = document.createElement('div');
-            color3.classList.add('color3');
+            color3.classList.add('color');
             const productStock = document.createElement('div');
             productStock.classList.add('product-stock');
             productStock.innerText = `stock : ${item.likes}`;
@@ -205,15 +250,30 @@ function showFavorite() {
         favoritesBar.append(lst);
     }
 }
-// favorite delete 버튼 설정
-function cancelFavorite(id) {
 
+// favorite trash 버튼 설정
+function cancelFavorite(id) {
+    // localstorage 업데이트
     const stored = JSON.parse(localStorage.getItem('favorites'));
     //console.log(stored[`${id}`]);
     delete stored[`${id}`];
     localStorage.setItem('favorites', JSON.stringify(stored));
     showFavorite();
 
+    // 삭제한 아이템이 product 목록에 보여지고 있으면 heart 취소
+    if (wholeData[id] != undefined) {
+        // 어느 element인지 찾기
+        num = 0;
+        lists = products.querySelector('ul').getElementsByTagName('li');
+        for (let i = 0; i < lists.length; i++) {
+            if (lists[i].children[1].href == wholeData[id].links.html) {
+                num = i;
+                break;
+            }
+        }
+        lists[num].querySelector('button').children[0].classList.replace('fas', 'far');
+        lists[num].querySelector('button').children[0].style.color = 'var(--txt-color)';
+    }
 }
 
 //eventlisteners
@@ -254,7 +314,7 @@ lightDarkButton.addEventListener('click', () => {
 });
 
 // 스크롤이 밑에서부터 700px위치이고 productLimit에 도달하지 않았으면 사진 재로드
-/*
+
 window.addEventListener('scroll', () => {
     if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 800 && loadedPhotos < productLimit && ready) {
         // ready 기능 꼭 넣어야됨
@@ -263,10 +323,25 @@ window.addEventListener('scroll', () => {
         //console.log('getPhotos');
     }
 });
-*/
+
 
 // favorite 보여주기
-favoritesButton.addEventListener('click', showFavorite);
+favoritesButton.addEventListener('click', () => {
+    if (!favoritesContainer.classList.contains('slide-in')) {
+        favoritesContainer.classList.remove('slide-out');
+        // open favoritescontainer
+        favoritesContainer.classList.add('slide-in');
+        // 아이콘 solid로
+        favoritesButton.children[0].classList.replace('far', 'fas');
+    } else {
+        favoritesContainer.classList.remove('slide-in');
+        // open favoritescontainer
+        favoritesContainer.classList.add('slide-out');
+        // 아이콘 solid로
+        favoritesButton.children[0].classList.replace('fas', 'far');
+    }
+    showFavorite();
+});
 
 // contact us 데이터처리
 function sendData(e) {
@@ -311,12 +386,4 @@ if (lightDarkStorage == 'dark') {
 }
 
 //localStorage.removeItem('favorites');
-// getPhotos();
-
-/*
-ReferenceError: id is not defined
-    at script.js:66
-    at Array.forEach (<anonymous>)
-    at displayPhotos (script.js:62)
-    at getPhotos (script.js:93)
-*/
+getPhotos();
