@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA API Pictures</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://s2.googleusercontent.com/s2/favicons?domain=www.nasa.gov">
+    <!-- ZTM Favicon -->
+    <!-- <link rel="icon" type="image/png" href="favicon.png"> -->
+</head>
+
+<body>
+    <!--loader-->
+    <div class="loader hidden">
+        <img src="./loaf-rocket.svg" alt="Rocket loading animation" />
+    </div>
+
+    <!--Container-->
+    <div class="container">
+        <!--navigation-->
+        <div class="navigation-container">
+            <span class="background"></span>
+            <!--Results Nav-->
+            <span class="navigation-items" id="resultsNav">
+                <h3 class="clickable" id="favoritesButton">Favorites</h3>
+                <h3>&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
+                <h3 class="clickable loadMore">Load more</h3>
+            </span>
+            <!--Favorites nav-->
+            <span class="navigation-items hidden" id="favoritesNav">
+                <h3 class="clickable loadMore">Load More NASA Images</h3>
+            </span>
+        </div>
+        <!--Images Container-->
+        <div class="image-container">
+            <div class="card" hidden>
+                <a href="#" title="View Full Image" target="_blank">
+                    <img src="./Screen Shot 2020-05-25 at 8.11.40 PM.png" alt="NASA Picture of the Day"
+                        class="card-img-top" />
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Title of Image</h5>
+                    <p class="clickable">Add to Favorites</p>
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, dolore
+                        odit. Consectetur consequuntur architecto dolorem recusandae beatae. Expedita deleniti tempora
+                        asperiores dolorem rem commodi consequatur nam corporis earum! Iusto, voluptatum? Lorem ipsum
+                        dolor sit, amet consectetur adipisicing elit. Ipsa at soluta labore rem harum, debitis assumenda
+                        ab numquam iste corporis animi quasi aliquid porro dolores reprehenderit atque. Id, quam. Eum.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est id consequatur itaque, incidunt
+                        quaerat unde tempore natus, necessitatibus veniam nemo fugiat harum consequuntur reprehenderit
+                        quos illum totam deleniti debitis explicabo! Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Sed natus fugit asperiores illum animi veritatis amet? Explicabo nulla odit, inventore
+                        sequi voluptatum, necessitatibus ducimus fugiat excepturi eius, consectetur laudantium nobis!
+                    </p>
+                    <small class="text-muted">
+                        <strong>12-12-2020</strong>
+                        <span>Copyright Info</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Save Confirmation-->
+    <div class="save-confirmed" hidden>
+        <h1>ADDED!</h1>
+    </div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
