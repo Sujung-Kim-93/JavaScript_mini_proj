@@ -31,7 +31,9 @@ unsplash API 및 infinite scroll(90개 제한)
 localStorage 이용 unsplash 사진 장바구나 추가/제거 기능  
 
 07 nasa picture api  
+https://nasa-api-pictures-01.netlify.app/  
 localStorage 이용 NASA today's picture favorite list 추가/제거 기능  
 
 08 splash page  
+https://splash-page-01.netlify.app/  
 figma 활용  
